@@ -19,6 +19,10 @@ private:
 	* @brief базовая цена продукта
 	*/
 	double basePrice;
+	/**
+	* @brief единица измерения
+	*/
+	string unit;
 public:
 	/**
 	* @brief конструктор по умолчанию
@@ -29,8 +33,9 @@ public:
 	* @param sku - индивидуальный номер
 	* @param n - наименование
 	* @param price - цена
+	* @param unit - единица измерения
 	*/
-	Product(const string sku, const string n, const double price);
+	Product(const string sku, const string n, const double price, const string unit);
 	/**
 	* @brief деструктор по умолчанию
 	*/
@@ -51,9 +56,26 @@ public:
 	*/
 	double getBasePrice() const;
 	/**
+	* @brief функция получениия единицы измерения
+	* @return единица измерения
+	*/
+	string getUnit() const;
+	/**
 	* @brief функция преобразования информации о продукти в тип string
 	* @return инормация о продукте
 	*/
-	virtual string getInfoString() const = 0;
+	string getInfoString() const;
+	/**
+	* @brief оператор ==
+	* @param other - продукт, с которым нужно сравнить
+	* @return true, если this == other
+	*/
+	bool operator ==( const Product& other) const;
+	/**
+	* @brief оператор !=
+	* @param other - продукт, с которым нужно сравнить
+	* @return true, если this != other
+	*/
+	bool operator !=(const Product& other) const;
 };
 

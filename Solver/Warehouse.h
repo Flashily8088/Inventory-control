@@ -12,11 +12,23 @@ struct WarehouseItem {
 	/**
 	* @brief умный указатель на продукт
 	*/
-	shared_ptr<Product> product;
+	Product product;
 	/**
 	* @brief количество продукта на складе
 	*/
 	double quantity;
+	/*
+	* @brief оператор ==
+	* @param other - переменная для сравнения с текущй
+	* @return true, если обе переменные равны
+	*/
+	bool operator ==(const WarehouseItem& other) const;
+	/*
+	* @brief оператор !=
+	* @param other - переменная для сравнения с текущй
+	* @return true, если обе переменные неравны
+	*/
+	bool operator !=(const WarehouseItem& other) const;
 };
 /**
 * @brief класс "Склад"
@@ -31,7 +43,7 @@ private:
 	/**
 	* @brief список указателей на клиентов склада
 	*/
-	vector<shared_ptr<Client>> clients;
+	vector<Client> clients;
 	/**
 	* @brief история продаж
 	*/
@@ -50,16 +62,16 @@ public:
 	* @param product - добавляемый продукт
 	* @param quantity - количество продукта
 	*/
-	void addProductStock(shared_ptr<Product> product, const double quantity);
+	void addProductStock(Product product, const double quantity);
 	/**
 	* @brief функия регистрации нового клиента
 	* @param client - клиент
 	*/
-	void registerClient(shared_ptr<Client> client);
+	void registerClient(Client client);
 	/**
 	* @brief функия регистрации (проведения) заказа
 	* @param clientID - индивидуальный номер клиента
-	* @param cart - карта заказа в виде вектораБ в котором храняться пары, состоящие из наименования товара и количества
+	* @param cart - карта заказа в виде вектора в котором храняться пары, состоящие из наименования товара и количества
 	* @param date - дата заказа
 	*/
 	bool processOrder(const int clientID, vector<pair<string, double>>& cart, const Date date);
@@ -67,7 +79,7 @@ public:
 	* @brief функия получения списка хранимых на складе товаров
 	* @return список хранимых на складе вещей
 	*/
-	const vector<WarehouseItem>& getCurrentInventory() const;
+	const vector<WarehouseItem> getCurrentInventory() const;
 	/**
 	* @brief функия получения истории заказов
 	* @return история продаж
@@ -77,6 +89,11 @@ public:
 	* @brief функия получения списка клиентов
 	* @return список клиентов
 	*/
-	vector<shared_ptr<Client>> getClients() const;
+	vector<Client> getClients() const;
+	/**
+	* @brief функия получения следующего номера заказа
+	* @return номер следующего заказа
+	*/
+	int getNextOrderID() const;
 };
 

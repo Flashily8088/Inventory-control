@@ -8,7 +8,7 @@ using namespace std;
 */
 class Client
 {
-protected:
+private:
 	/**
 	* @brief индивидуальный номер клиента
 	*/
@@ -25,6 +25,18 @@ protected:
 	* @brief индивидуальные номера заказов клиента
 	*/
 	vector <int> orderIDs;
+	/**
+	* @brief скидка
+	*/
+	double discountRate;
+	/**
+	* @brief тип клиента
+	*/
+	string clientType;
+	/**
+	* @brief адресс
+	*/
+	string address;
 public:
 	/**
 	* @brief конструктор по умолчанию
@@ -34,8 +46,10 @@ public:
 	* @brief конструктор
 	* @param ID - индивидуальный номер клиента
 	* @param n - название корпоративного аккаунта
+	* @param type - тип клиента
+	* @param addr - адресс
 	*/
-	Client(const int ID, const string n);
+	Client(const int ID, const string n, const string type, const string addr);
 	/**
 	* @brief деструктор по умолчанию
 	*/
@@ -51,6 +65,16 @@ public:
 	*/
 	string getName() const;
 	/**
+	* @brief функция получения типа клиента
+	* @return тип клиента
+	*/
+	string getClientType() const;
+	/**
+	* @brief функция получения адресса
+	* @return адресс
+	*/
+	string getAddress() const;
+	/**
 	* @brief функция добавления потраченных денег
 	* @param amount - количество потраченных денег
 	*/
@@ -65,18 +89,33 @@ public:
 	*/
 	void linkOrder(int orderID);
 	/**
-	* @brief виртуальная функция преобразования информации о клиенте в string
+	* @brief функция преобразования информации о клиенте в string
 	* @return информация о клиенте
 	*/
-	virtual string getClientTypeString() const = 0;
+	string toString() const;
 	/**
-	* @brief виртуальная функция получения размера скидки
+	* @brief функция получения размера скидки
 	* @return размер скидки
 	*/
-	virtual double getDiscountRate() const { return 0.0; }
+	double getDiscountRate() const;
 	/**
-	* @brief виртуальная функция обновления статуса скидки клиента
+	* @brief функция обновления статуса скидки клиента
 	*/
-	virtual void updateDiscountStatus() {};
+	void updateDiscountStatus();
+	/**
+	* @brief функция получения индивидуального номера заказа
+	* @return индивидуальный номер заказа
+	*/
+	vector<int> getOrderIDs() const;
+	/**
+	* @brief оператор ==
+	* @return true,  если клиенты равны
+	*/
+	bool operator ==(const Client& other) const;
+	/**
+	* @brief оператор ==
+	* @return true,  если клиенты неравны
+	*/
+	bool operator !=(const Client& other) const;
 };
 

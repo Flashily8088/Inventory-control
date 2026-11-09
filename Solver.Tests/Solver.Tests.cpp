@@ -5,10 +5,6 @@
 #include<memory>
 #include<iomanip>
 #include "../Solver/Warehouse.h"
-#include "../Solver/BulkProduct.h"
-#include "../Solver/PackedProduct.h"
-#include "../Solver/RetailStore.h"
-#include "../Solver/WholesaleClient.h"
 #include "../Solver/Date.h"
 
 #include "../Solver/Product.h"
@@ -23,141 +19,144 @@ namespace SolverTests
 	TEST_CLASS(SolverTests)
 	{
 	public:
-
-		TEST_METHOD(BulkProduct_constructor)
-		{
-			//Arrange
-			string SKU = "SKU-01";
-			string name = "Apple";
-			double price = 1000.0;
-			string unit = "kg";
+		TEST_METHOD(Client_constructor) {
 			//Act
-			BulkProduct product(SKU, name, price, unit);
+			Client client;
 			//Assert
-			Assert::AreEqual(product.getSKU(), SKU);
-			Assert::AreEqual(product.getName(), name);
-			Assert::AreEqual(product.getBasePrice(), price);
-			Assert::AreEqual(product.getUnit(), unit);
+			Assert::AreEqual(0, client.getID());
+			Assert::AreEqual(static_cast<string>(""), client.getName());
+			Assert::AreEqual(0.0, client.getTotalSpent());
+			Assert::AreEqual(0.0, client.getDiscountRate());
+			Assert::AreEqual(static_cast<string>("Regular"), client.getClientType());
+			Assert::AreEqual(static_cast<string>(""), client.getAddress());
 		}
-		TEST_METHOD(BulkProduct_getInfoString) {
+		TEST_METHOD(Client_Constructor) {
 			//Arrange
-			string SKU = "SKU-01";
-			string name = "Apple";
-			double price = 1000.0;
-			string unit = "kg";
-			BulkProduct product(SKU, name, price, unit);
-			string test = "[Item] Apple (SKU: SKU-01) - 1000.000000 rub/kg";
+			int id = 1;
+			string name = "AAA";
+			string clientType = "Retail";
+			string address = "Apple st.";
 			//Act
-			string result = product.getInfoString();
+			Client client(id, name, clientType, address);
 			//Assert
-			Assert::AreEqual(result, test);
+			Assert::AreEqual(id, client.getID());
+			Assert::AreEqual(name, client.getName());
+			Assert::AreEqual(0.0, client.getTotalSpent());
+			Assert::AreEqual(0.0, client.getDiscountRate());
+			Assert::AreEqual(clientType, client.getClientType());
+			Assert::AreEqual(address, client.getAddress());
 		}
-		TEST_METHOD(BulkProduct_getSKU) {
+		TEST_METHOD(Client_getClientType) {
 			//Arrange
-			string SKU = "SKU-01";
-			string name = "Apple";
-			double price = 1000.0;
-			string unit = "kg";
-			BulkProduct product(SKU, name, price, unit);
+			int id = 1;
+			string name = "AAA";
+			string clientType = "Retail";
+			string address = "Apple st.";
+			Client client(id, name, clientType, address);
 			//Act
-			string result = product.getSKU();
+			string result =  client.getClientType();
 			//Assert
-			Assert::AreEqual(result, SKU);
+			Assert::AreEqual(clientType, result);
 		}
-		TEST_METHOD(BulkProduct_getName) {
+		TEST_METHOD(Client_getName) {
 			//Arrange
-			string SKU = "SKU-01";
-			string name = "Apple";
-			double price = 1000.0;
-			string unit = "kg";
-			BulkProduct product(SKU, name, price, unit);
+			int id = 1;
+			string name = "AAA";
+			string clientType = "Retail";
+			string address = "Apple st.";
+			Client client(id, name, clientType, address);
 			//Act
-			string result = product.getName();
+			string result = client.getName();
 			//Assert
-			Assert::AreEqual(result, name);
+			Assert::AreEqual(name, result);
 		}
-		TEST_METHOD(BulkProduct_getPrice) {
+		TEST_METHOD(Client_getAddress) {
 			//Arrange
-			string SKU = "SKU-01";
-			string name = "Apple";
-			double price = 1000.0;
-			string unit = "kg";
-			BulkProduct product(SKU, name, price, unit);
+			int id = 1;
+			string name = "AAA";
+			string clientType = "Retail";
+			string address = "Apple st.";
+			Client client(id, name, clientType, address);
 			//Act
-			double result = product.getBasePrice();
+			string result = client.getAddress();
 			//Assert
-			Assert::AreEqual(result, price);
+			Assert::AreEqual(address, result);
 		}
-		TEST_METHOD(BulkProduct_getUnit) {
+		TEST_METHOD(Client_addSpentMoney) {
 			//Arrange
-			string SKU = "SKU-01";
-			string name = "Apple";
-			double price = 1000.0;
-			string unit = "kg";
-			BulkProduct product(SKU, name, price, unit);
+			int id = 1;
+			string name = "AAA";
+			string clientType = "Retail";
+			string address = "Apple st.";
+			Client client(id, name, clientType, address);
+			double SpentMoney = 100.0;
 			//Act
-			string result = product.getUnit();
+			client.addSpentMoney(SpentMoney);
 			//Assert
-			Assert::AreEqual(result, unit);
+			Assert::AreEqual(SpentMoney, client.getTotalSpent());
 		}
-		TEST_METHOD(PackedProduct_constructor)
-		{
+		TEST_METHOD(Client_getTotalSpent) {
 			//Arrange
-			string SKU = "SKU-01";
-			string name = "Apple";
-			double price = 1000.0;
-			string packigingType = "box";
-			int volumePerUnit = 10;
+			int id = 1;
+			string name = "AAA";
+			string clientType = "Retail";
+			string address = "Apple st.";
+			Client client(id, name, clientType, address);
 			//Act
-			PackedProduct product(SKU, name, price, packigingType, volumePerUnit);
+			double result = client.getTotalSpent();
 			//Assert
-			Assert::AreEqual(product.getSKU(), SKU);
-			Assert::AreEqual(product.getName(), name);
-			Assert::AreEqual(product.getBasePrice(), price);
-			Assert::AreEqual(product.getPackagingType(), packigingType);
-			Assert::AreEqual(product.getVolumePerUnit(), volumePerUnit);
+			Assert::AreEqual(0.0, result);
 		}
-		TEST_METHOD(PackedProduct_getInfoString) {
+		TEST_METHOD(Client_linkOrder) {
 			//Arrange
-			string SKU = "SKU-01";
-			string name = "Apple";
-			double price = 1000.0;
-			string packigingType = "box";
-			int volumePerUnit = 10;
-			PackedProduct product(SKU, name, price, packigingType, volumePerUnit);
-			string test = "[Item] Apple (SKU: SKU-01) - Type of packaging: box (10 kg/l), Price: 1000.000000 rub/item.";
+			int id = 1;
+			string name = "AAA";
+			string clientType = "Retail";
+			string address = "Apple st.";
+			Client client(id, name, clientType, address);
+			int orderID = 1;
 			//Act
-			string result = product.getInfoString();
+			client.linkOrder(orderID);
 			//Assert
-			Assert::AreEqual(result, test);
+			Assert::AreEqual(client.getOrderIDs()[0], orderID);
 		}
-		TEST_METHOD(PackedProduct_getPackigingType)
-		{
+		TEST_METHOD(Client_toString) {
 			//Arrange
-			string SKU = "SKU-01";
-			string name = "Apple";
-			double price = 1000.0;
-			string packigingType = "box";
-			int volumePerUnit = 10;
-			PackedProduct product(SKU, name, price, packigingType, volumePerUnit);
+			int id = 1;
+			string name = "AAA";
+			string clientType = "Retail";
+			string address = "Apple st.";
+			Client client(id, name, clientType, address);
+			string test = "Retail (Address: Apple st.)";
 			//Act
-			string result = product.getPackagingType();
+			string result = client.toString();
 			//Assert
-			Assert::AreEqual(result, packigingType);
+			Assert::AreEqual(test, result);
 		}
-		TEST_METHOD(PackedProduct_getVolumePerUnit)
-		{
+		TEST_METHOD(Client_getDiscountRate) {
 			//Arrange
-			string SKU = "SKU-01";
-			string name = "Apple";
-			double price = 1000.0;
-			string packigingType = "box";
-			int volumePerUnit = 10;
-			PackedProduct product(SKU, name, price, packigingType, volumePerUnit);
+			int id = 1;
+			string name = "AAA";
+			string clientType = "Retail";
+			string address = "Apple st.";
+			Client client(id, name, clientType, address);
 			//Act
-			int result = product.getVolumePerUnit();
+			double result = client.getDiscountRate();
 			//Assert
-			Assert::AreEqual(result, volumePerUnit);
+			Assert::AreEqual(0.0, result);
+		}
+		TEST_METHOD(Client_updateDiscountRate) {
+			//Arrange
+			int id = 1;
+			string name = "AAA";
+			string clientType = "Retail";
+			string address = "Apple st.";
+			Client client(id, name, clientType, address);
+			client.addSpentMoney(100000.1);
+			//Act
+			client.updateDiscountStatus();
+			//Assert
+			Assert::AreEqual(0.05, client.getDiscountRate());
 		}
 		TEST_METHOD(Date_constructor)
 		{
@@ -269,291 +268,484 @@ namespace SolverTests
 			//Assert
 			Assert::AreEqual(result, year);
 		}
-		TEST_METHOD(Order_constructor) {
+		TEST_METHOD(Dates_Are_Equal)
+		{
 			//Arrange
+			int day1 = 1;
+			int month1 = 1;
+			int year1 = 2026;
+			Date date1(day1, month1, year1);
+			int day2 = 1;
+			int month2 = 1;
+			int year2 = 2026;
+			Date date2(day2, month2, year2);
+			//Act
+			bool result = (date1 == date2);
+			//Assert
+			Assert::IsTrue(result);
+		}
+		TEST_METHOD(Order_constructor) {
+			//Arange
 			int orderID = 1;
 			int clientID = 1;
-			Date date(1, 1, 2026);
-			double finalTotal = 400.0;
-			shared_ptr<Product> flour = make_shared<BulkProduct>("SKU-01", "Flour", 40.0, "kg");
-			OrderItem orderItem;
-			orderItem.product = flour;
-			orderItem.quantity = 10.0;
-			vector<OrderItem> orderItems;
-			orderItems.push_back(orderItem);
+			Product product("SKU-04", "Apple juice", 120.0, "l");
+			OrderItem orderItem(product, 1);
+			vector<OrderItem> items(1, orderItem);
+			Date orderDate(1, 1, 2026);
+			double finalTotal = 120.0;
 			//Act
-			Order order(orderID, clientID, orderItems, date, finalTotal);
+			Order order(orderID, clientID, items, orderDate, finalTotal);
 			//Assert
-			Assert::AreEqual(order.getOrderID(), orderID);
-			Assert::AreEqual(order.getClientID(), clientID);
-			Assert::AreEqual(orderItems.size(), order.getItems().size());
-			Assert::AreEqual(orderItems[0].product->getSKU(), order.getItems()[0].product->getSKU());
-			Assert::AreEqual(orderItems[0].quantity, order.getItems()[0].quantity);
-			Assert::AreEqual(date.ToString(), order.getOrderDate().ToString());
-			Assert::AreEqual(order.getFinalTotal(), finalTotal);
+			Assert::AreEqual(1, order.getOrderID());
+			Assert::AreEqual(1, order.getClientID());
+			Assert::AreEqual(items.size(), order.getItems().size());
+			bool result2 = items[0] == order.getItems()[0];
+			Assert::IsTrue(result2);
+			bool result1 = orderDate == order.getOrderDate();
+			Assert::IsTrue(result1);
+			Assert::AreEqual(finalTotal, order.getFinalTotal());
 		}
 		TEST_METHOD(Order_getOrderID) {
-			//Arrange
+			//Arange
 			int orderID = 1;
 			int clientID = 1;
-			Date date(1, 1, 2026);
-			double finalTotal = 400.0;
-			shared_ptr<Product> flour = make_shared<BulkProduct>("SKU-01", "Flour", 40.0, "kg");
-			OrderItem orderItem;
-			orderItem.product = flour;
-			orderItem.quantity = 10.0;
-			vector<OrderItem> orderItems;
-			orderItems.push_back(orderItem);
-			Order order(orderID, clientID, orderItems, date, finalTotal);
+			Product product("SKU-04", "Apple juice", 120.0, "l");
+			OrderItem orderItem(product, 1);
+			vector<OrderItem> items(1, orderItem);
+			Date orderDate(1, 1, 2026);
+			double finalTotal = 120.0;
+			Order order(orderID, clientID, items, orderDate, finalTotal);
 			//Act
 			int result = order.getOrderID();
 			//Assert
-			Assert::AreEqual(result, orderID);
+			Assert::AreEqual(orderID, result);
 		}
 		TEST_METHOD(Order_getClientID) {
-			//Arrange
+			//Arange
 			int orderID = 1;
 			int clientID = 1;
-			Date date(1, 1, 2026);
-			double finalTotal = 400.0;
-			shared_ptr<Product> flour = make_shared<BulkProduct>("SKU-01", "Flour", 40.0, "kg");
-			OrderItem orderItem;
-			orderItem.product = flour;
-			orderItem.quantity = 10.0;
-			vector<OrderItem> orderItems;
-			orderItems.push_back(orderItem);
-			Order order(orderID, clientID, orderItems, date, finalTotal);
+			Product product("SKU-04", "Apple juice", 120.0, "l");
+			OrderItem orderItem(product, 1);
+			vector<OrderItem> items(1, orderItem);
+			Date orderDate(1, 1, 2026);
+			double finalTotal = 120.0;
+			Order order(orderID, clientID, items, orderDate, finalTotal);
 			//Act
 			int result = order.getClientID();
 			//Assert
-			Assert::AreEqual(result, clientID);
+			Assert::AreEqual(clientID, result);
 		}
-		TEST_METHOD(Order_getItems) {
-			//Arrange
+		TEST_METHOD(Order_getOrderItems) {
+			//Arange
 			int orderID = 1;
 			int clientID = 1;
-			Date date(1, 1, 2026);
-			double finalTotal = 400.0;
-			shared_ptr<Product> flour = make_shared<BulkProduct>("SKU-01", "Flour", 40.0, "kg");
-			OrderItem orderItem;
-			orderItem.product = flour;
-			orderItem.quantity = 10.0;
-			vector<OrderItem> orderItems;
-			orderItems.push_back(orderItem);
-			Order order(orderID, clientID, orderItems, date, finalTotal);
+			Product product("SKU-04", "Apple juice", 120.0, "l");
+			OrderItem orderItem(product, 1);
+			vector<OrderItem> items(1, orderItem);
+			Date orderDate(1, 1, 2026);
+			double finalTotal = 120.0;
+			Order order(orderID, clientID, items, orderDate, finalTotal);
 			//Act
-			vector <OrderItem> result = order.getItems();
+			vector<OrderItem> result = order.getItems();
 			//Assert
-			Assert::AreEqual(orderItems.size(), result.size());
-			Assert::AreEqual(orderItems[0].product->getSKU(), result[0].product->getSKU());
-			Assert::AreEqual(orderItems[0].quantity, result[0].quantity);
+			Assert::AreEqual(items.size(), result.size());
+			bool res = items[0] == result[0];
+			Assert::IsTrue(res);
 		}
 		TEST_METHOD(Order_getOrderDate) {
-			//Arrange
+			//Arange
 			int orderID = 1;
 			int clientID = 1;
-			Date date(1, 1, 2026);
-			double finalTotal = 400.0;
-			shared_ptr<Product> flour = make_shared<BulkProduct>("SKU-01", "Flour", 40.0, "kg");
-			OrderItem orderItem;
-			orderItem.product = flour;
-			orderItem.quantity = 10.0;
-			vector<OrderItem> orderItems;
-			orderItems.push_back(orderItem);
-			Order order(orderID, clientID, orderItems, date, finalTotal);
+			Product product("SKU-04", "Apple juice", 120.0, "l");
+			OrderItem orderItem(product, 1);
+			vector<OrderItem> items(1, orderItem);
+			Date orderDate(1, 1, 2026);
+			double finalTotal = 120.0;
+			Order order(orderID, clientID, items, orderDate, finalTotal);
 			//Act
 			Date result = order.getOrderDate();
 			//Assert
-			Assert::AreEqual(date.ToString(), result.ToString());
+			bool res = orderDate == result;
+			Assert::IsTrue(res);
 		}
 		TEST_METHOD(Order_getFinalTotal) {
-			//Arrange
+			//Arange
 			int orderID = 1;
 			int clientID = 1;
-			Date date(1, 1, 2026);
-			double finalTotal = 400.0;
-			shared_ptr<Product> flour = make_shared<BulkProduct>("SKU-01", "Flour", 40.0, "kg");
-			OrderItem orderItem;
-			orderItem.product = flour;
-			orderItem.quantity = 10.0;
-			vector<OrderItem> orderItems;
-			orderItems.push_back(orderItem);
-			Order order(orderID, clientID, orderItems, date, finalTotal);
+			Product product("SKU-04", "Apple juice", 120.0, "l");
+			OrderItem orderItem(product, 1);
+			vector<OrderItem> items(1, orderItem);
+			Date orderDate(1, 1, 2026);
+			double finalTotal = 120.0;
+			Order order(orderID, clientID, items, orderDate, finalTotal);
 			//Act
 			double result = order.getFinalTotal();
 			//Assert
-			Assert::AreEqual(result, finalTotal);
+			Assert::AreEqual(finalTotal, result);
 		}
 		TEST_METHOD(Order_ToString) {
-			//Arrange
+			//Arange
 			int orderID = 1;
 			int clientID = 1;
-			Date date(1, 1, 2026);
-			double finalTotal = 400.0;
-			shared_ptr<Product> flour = make_shared<BulkProduct>("SKU-01", "Flour", 40.0, "kg");
-			OrderItem orderItem;
-			orderItem.product = flour;
-			orderItem.quantity = 10.0;
-			vector<OrderItem> orderItems;
-			orderItems.push_back(orderItem);
-			Order order(orderID, clientID, orderItems, date, finalTotal);
-			string test = " * Order #1 | Client ID: 1 | Date: 1. 1. 2026 | Total: 400.000000 rub.";
+			Product product("SKU-04", "Apple juice", 120.0, "l");
+			OrderItem orderItem(product, 1);
+			vector<OrderItem> items(1, orderItem);
+			Date orderDate(1, 1, 2026);
+			double finalTotal = 120.0;
+			Order order(orderID, clientID, items, orderDate, finalTotal);
+			string test = " * Order #1 | Client ID: 1 | Date: 1. 1. 2026 | Total: 120.000000 rub.";
 			//Act
 			string result = order.ToString();
 			//Assert
-			Assert::AreEqual(result, test);
+			Assert::AreEqual(test, result);
 		}
-		TEST_METHOD(Retail_constructor)
-		{
-			//Arrange
-			int ID = 1;
-			string name = "AAA";
-			string address = "St. Apple, 15";
+		TEST_METHOD(Orders_Are_Equal) {
+			//Arange
+			int orderID1 = 1;
+			int clientID1 = 1;
+			Product product("SKU-04", "Apple juice", 120.0, "l");
+			OrderItem orderItem(product, 1);
+			vector<OrderItem> items1(1, orderItem);
+			Date orderDate1(1, 1, 2026);
+			double finalTotal1 = 120.0;
+			Order order1(orderID1, clientID1, items1, orderDate1, finalTotal1);
+			int orderID2 = 1;
+			int clientID2 = 1;
+			vector<OrderItem> items2(1, orderItem);
+			Date orderDate2(1, 1, 2026);
+			double finalTotal2 = 120.0;
+			Order order2(orderID2, clientID2, items2, orderDate2, finalTotal2);
 			//Act
-			RetailStore store(ID, name, address);
+			bool result = order1 == order2;
 			//Assert
-			Assert::AreEqual(store.getID(), ID);
-			Assert::AreEqual(store.getName(), name);
-			Assert::AreEqual(store.getAddress(), address);
-		}
-		TEST_METHOD(Retail_getClientTypeString)
-		{
-			//Arrange
-			int ID = 1;
-			string name = "AAA";
-			string address = "St. Apple, 15";
-			RetailStore store(ID, name, address);
-			string test = "Retail store (Address: St. Apple, 15";
-			//Act
-			string result = store.getClientTypeString();
-			//Assert
-			Assert::AreEqual(result, test);
-		}
-		TEST_METHOD(Retail_getAddress)
-		{
-			//Arrange
-			int ID = 1;
-			string name = "AAA";
-			string address = "St. Apple, 15";
-			RetailStore store(ID, name, address);
-			//Act
-			string result = store.getAddress();
-			//Assert
-			Assert::AreEqual(result, address);
-		}
-		TEST_METHOD(Wholesale_constructor)
-		{
-			//Arrange
-			int ID = 1;
-			string name = "AAA";
-			double discount = 5.0;
-			//Act
-			WholesaleClient store(ID, name, discount);
-			//Assert
-			Assert::AreEqual(store.getID(), ID);
-			Assert::AreEqual(store.getName(), name);
-			Assert::AreEqual(store.getDiscountRate(), discount);
-		}
-		TEST_METHOD(Wholesale_getDiscountRate)
-		{
-			//Arrange
-			int ID = 1;
-			string name = "AAA";
-			double discount = 5.0;
-			WholesaleClient store(ID, name, discount);
-			//Act
-			double result = store.getDiscountRate();
-			//Assert
-			Assert::AreEqual(result, discount);
-		}
-		TEST_METHOD(Wholesale_updateDiscount)
-		{
-			//Arrange
-			int ID = 1;
-			string name = "AAA";
-			double discount = 5.0;
-			WholesaleClient store(ID, name, discount);
-			store.addSpentMoney(500010.0);
-			//Act
-			store.updateDiscountStatus();
-			//Assert
-			Assert::AreEqual(store.getDiscountRate(), 0.15);
-		}
-		TEST_METHOD(Wholesale_getClientTypeString)
-		{
-			//Arrange
-			int ID = 1;
-			string name = "AAA";
-			double discount = 5.0;
-			WholesaleClient store(ID, name, discount);
-			string test = "Wholesale client (Discount: 5.000000";
-			//Act
-			string result = store.getClientTypeString();
-			//Assert
-			Assert::AreEqual(result, test);
-		}
-		TEST_METHOD(Warehose_constructor) {
-			//Arregne
-			//Act
-			Warehouse wh;
-			const vector<WarehouseItem>& initialInventory = wh.getCurrentInventory();
-			const vector<shared_ptr<Client>>& initialClients = wh.getClients();
-			const vector<Order>& initialHistory = wh.getSalesHistory();
-			//Assert
-			Assert::AreEqual(static_cast<size_t>(0), initialInventory.size());
-			Assert::AreEqual(static_cast<size_t>(0), initialClients.size());
-			Assert::AreEqual(static_cast<size_t>(0), initialHistory.size());
-		}
-		TEST_METHOD(Warehouse_AddProductStock_And_Summation)
-		{
-			//Arrenge
-			Warehouse wh;
-			shared_ptr<Product> flour = make_shared<BulkProduct>("SKU-01", "Flour", 40.0, "kg");
-			//Act
-			wh.addProductStock(flour, 50.0);
-			const vector<WarehouseItem>& initialInventory = wh.getCurrentInventory();
-			//Assert
-			Assert::AreEqual(static_cast<size_t>(1), initialInventory.size());
-			Assert::AreEqual(50.0, initialInventory[0].quantity);
-			//Act
-			wh.addProductStock(flour, 50.0);
-			//Assert
-			Assert::AreEqual(static_cast<size_t>(1), initialInventory.size());
-			Assert::AreEqual(100.0, initialInventory[0].quantity);
-		}
-		TEST_METHOD(Warehouse_RegisterClient)
-		{
-			// Arrange
-			Warehouse wh;
-			shared_ptr<Client> store = make_shared<RetailStore>(101, "Paterochka", "Lenina St.");
-
-			// Act
-			wh.registerClient(store);
-
-			// Assert
-			const vector<shared_ptr<Client>>& clients = wh.getClients();
-			Assert::AreEqual(static_cast<size_t>(1), clients.size());
-			Assert::AreEqual(101, clients[0]->getID());
-			Assert::AreEqual(string("Paterochka"), clients[0]->getName());
-		}
-		TEST_METHOD(Warehouse_ProcessOrder_Success)
-		{
-			// Arrange
-			Warehouse wh;
-			shared_ptr<Product> flour = make_shared<BulkProduct>("SKU-01", "Flour", 40.0, "kg");
-			wh.addProductStock(flour, 150.0); // Кладем 150 кг на склад
-			shared_ptr<Client> store = make_shared<RetailStore>(101, "Paterochka", "Lenina St.");
-			wh.registerClient(store);
-			vector<pair<string, double>> cart;
-			cart.push_back(pair<string, double>("SKU-01", 50.0));
-			// Act
-			bool result = wh.processOrder(101, cart, Date(2, 11, 2026));
-			// Assert
 			Assert::IsTrue(result);
-			Assert::AreEqual(100.0, wh.getCurrentInventory()[0].quantity);
-			Assert::AreEqual(static_cast<size_t>(1), wh.getSalesHistory().size());
-			Assert::AreEqual(2000.0, wh.getSalesHistory()[0].getFinalTotal());
-			Assert::AreEqual(2000.0, store->getTotalSpent());
+		}
+		TEST_METHOD(Product_Constructor) {
+			//Arange//Act
+			Product product;
+			string empty = "";
+			//Assert
+			Assert::AreEqual(product.getSKU(), empty);
+			Assert::AreEqual(product.getName(), empty);
+			Assert::AreEqual(product.getBasePrice(), 0.0);
+		}
+		TEST_METHOD(Product_Constructor_with_params) {
+			//Arange
+			string SKU = "SKU-04";
+			string name = "Apple juice";
+			double basePrice = 120.0;
+			string unit = "l";
+			//Act
+			Product product(SKU ,name, basePrice, unit);
+			//Assert
+			Assert::AreEqual(product.getSKU(), SKU);
+			Assert::AreEqual(product.getName(), name);
+			Assert::AreEqual(product.getBasePrice(), basePrice);
+			Assert::AreEqual(product.getUnit(), unit);
+		}
+		TEST_METHOD(Product_getSKU) {
+			//Arange
+			string SKU = "SKU-04";
+			string name = "Apple juice";
+			double basePrice = 120.0;
+			string unit = "l";
+			Product product(SKU, name, basePrice, unit);
+			//Act
+			string result = product.getSKU();
+			//Assert
+			Assert::AreEqual(result, SKU);
+		}
+		TEST_METHOD(Product_getName) {
+			//Arange
+			string SKU = "SKU-04";
+			string name = "Apple juice";
+			double basePrice = 120.0;
+			string unit = "l";
+			Product product(SKU, name, basePrice, unit);
+			//Act
+			string result = product.getName();
+			//Assert
+			Assert::AreEqual(result, name);
+		}
+		TEST_METHOD(Product_getBasePrice) {
+			//Arange
+			string SKU = "SKU-04";
+			string name = "Apple juice";
+			double basePrice = 120.0;
+			string unit = "l";
+			Product product(SKU, name, basePrice, unit);
+			//Act
+			double result = product.getBasePrice();
+			//Assert
+			Assert::AreEqual(result, basePrice);
+		}
+		TEST_METHOD(Product_getUnit) {
+			//Arange
+			string SKU = "SKU-04";
+			string name = "Apple juice";
+			double basePrice = 120.0;
+			string unit = "l";
+			Product product(SKU, name, basePrice, unit);
+			//Act
+			string result = product.getUnit();
+			//Assert
+			Assert::AreEqual(result, unit);
+		}
+		TEST_METHOD(Product_getInfoString) {
+			//Arange
+			string SKU = "SKU-04";
+			string name = "Apple juice";
+			double basePrice = 120.0;
+			string unit = "l";
+			Product product(SKU, name, basePrice, unit);
+			string test = "[Item] Apple juice (SKU: SKU-04 - 120.000000 rub/l";
+			//Act
+			string result = product.getInfoString();
+			//Assert
+			Assert::AreEqual(result, test);
+		}
+		TEST_METHOD(Products_Are_Equal) {
+			//Arange
+			string SKU1 = "SKU-04";
+			string name1 = "Apple juice";
+			double basePrice1 = 120.0;
+			string unit1 = "l";
+			Product product1(SKU1, name1, basePrice1, unit1);
+			string SKU2 = "SKU-04";
+			string name2 = "Apple juice";
+			double basePrice2 = 120.0;
+			string unit2 = "l";
+			Product product2(SKU2, name2, basePrice2, unit2);
+			//Act
+			bool result = product1 == product2;
+			//Assert
+			Assert::IsTrue(result);
+		}
+		TEST_METHOD(Products_Are_Not_Equal) {
+			//Arange
+			string SKU1 = "SKU-04";
+			string name1 = "Apple juice";
+			double basePrice1 = 120.0;
+			string unit1 = "l";
+			Product product1(SKU1, name1, basePrice1, unit1);
+			string SKU2 = "SKU-04";
+			string name2 = "Apple juice";
+			double basePrice2 = 120.0;
+			string unit2 = "l";
+			Product product2(SKU2, name2, basePrice2, unit2);
+			//Act
+			bool result = product1 != product2;
+			//Assert
+			Assert::IsFalse(result);
+		}
+		TEST_METHOD(Warehouse_constructor) {
+			//Arange//Act
+			Warehouse warehouse;
+			int test = 1;
+			//Assert
+			Assert::AreEqual(warehouse.getNextOrderID(), test);
+		}
+		TEST_METHOD(Warehouse_addProductStock) {
+			//Arange
+			Warehouse warehouse;
+			string SKU = "SKU-04";
+			string name = "Apple juice";
+			double basePrice = 120.0;
+			string unit = "l";
+			Product product(SKU, name, basePrice, unit);
+			double quantity = 1.0;
+			WarehouseItem wi(product, quantity);
+			vector<WarehouseItem> test(1, wi);
+			//Act
+			warehouse.addProductStock(product, quantity);
+			//Assert
+			Assert::AreEqual(warehouse.getCurrentInventory().size(), test.size());
+			bool result = warehouse.getCurrentInventory()[0] == test[0];
+			Assert::IsTrue(result);
+		}
+		TEST_METHOD(Warehouse_registerClient) {
+			//Arange
+			Warehouse warehouse;
+			int id = 1;
+			string name = "AAA";
+			string clientType = "Retail";
+			string address = "Apple st.";
+			Client client(id, name, clientType, address);
+			vector<Client> test(1, client);
+			//Act
+			warehouse.registerClient(client);
+			//Assert
+			Assert::AreEqual(warehouse.getClients().size(), test.size());
+			bool result = warehouse.getClients()[0] == test[0];
+			Assert::IsTrue(result);
+		}
+		TEST_METHOD(Warehouse_registerClient_sameIDs) {
+			//Arange
+			Warehouse warehouse;
+			Client client1(1, "Ivan", "Regular", "Moscow");
+			Client client2(1, "Petr", "Retail", "Tomsk");
+			//Act
+			warehouse.registerClient(client1);
+			warehouse.registerClient(client2);
+			//Assert
+			Assert::AreEqual(static_cast<size_t>(1), warehouse.getClients().size());
+			Assert::AreEqual(string("Ivan"), warehouse.getClients()[0].getName());
+		}
+		TEST_METHOD(Empty_Warehouse_processOrder) {
+			//Arrange
+			Warehouse warehouse;
+			int clientID = 1;
+			vector<pair<string, double>> cart;
+			string product_SKU = "SKU-04";
+			string product_name = "Apple juice";
+			double product_base_price = 120.0;
+			string product_unit = "l";
+			double product_quantity = 400.0;
+			cart.push_back(pair<string, double>(product_SKU, 50.0));
+			Date order_date(1, 1, 2026);
+			//Act
+			bool result = warehouse.processOrder(clientID, cart, order_date);
+			//Assert
+			Assert::IsFalse(result);
+		}
+		TEST_METHOD(Warehouse_processOrder) {
+			//Arrange
+			Warehouse warehouse;
+			vector<pair<string, double>> cart;
+			string product_SKU = "SKU-04";
+			string product_name = "Apple juice";
+			double product_base_price = 120.0;
+			string product_unit = "l";
+			double product_quantity = 400.0;
+			Date order_date(1, 1, 2026);
+			cart.push_back(pair<string, double>(product_SKU, 50.0));
+			Product product(product_SKU, product_name, product_base_price, product_unit);
+			warehouse.addProductStock(product, product_quantity);
+			int client_ID = 1;
+			string client_name = "AAA";
+			string client_type = "Retail";
+			string client_address = "Apple st.";
+			Client client(client_ID, client_name, client_type, client_address);
+			warehouse.registerClient(client);
+			//Act
+			bool result = warehouse.processOrder(client_ID, cart, order_date);
+			//Assert
+			Assert::IsTrue(result);
+		}
+		TEST_METHOD(Warehouse_getCurentInventory) {
+			//Arrange
+			Warehouse warehouse;
+			vector<pair<string, double>> cart;
+			string product_SKU = "SKU-04";
+			string product_name = "Apple juice";
+			double product_base_price = 120.0;
+			string product_unit = "l";
+			double product_quantity = 400.0;
+			Product product(product_SKU, product_name, product_base_price, product_unit);
+			warehouse.addProductStock(product, product_quantity);
+			WarehouseItem item(product, product_quantity);
+			vector<WarehouseItem> test;
+			test.push_back(item);
+			//Act
+			vector<WarehouseItem> result = warehouse.getCurrentInventory();
+			//Assert
+			Assert::AreEqual(result.size(), test.size());
+			bool res = result[0] == test[0];
+			Assert::IsTrue(res);
+		}
+		TEST_METHOD(Warehouse_getSalesHistory) {
+			Warehouse warehouse;
+			int clientID = 1;
+			vector<pair<string, double>> cart;
+			string product_SKU = "SKU-04";
+			string product_name = "Apple juice";
+			double product_base_price = 120.0;
+			string product_unit = "l";
+			double product_quantity = 400.0;
+			Date order_date(1, 1, 2026);
+			cart.push_back(pair<string, double>(product_SKU, 50.0));
+			Product product(product_SKU, product_name, product_base_price, product_unit);
+			warehouse.addProductStock(product, product_quantity);
+			int client_ID = 1;
+			string client_name = "AAA";
+			string client_type = "Retail";
+			string client_address = "Apple st.";
+			Client client(client_ID, client_name, client_type, client_address);
+			warehouse.registerClient(client);
+			warehouse.processOrder(clientID, cart, order_date);
+			OrderItem item(product, 50.0);
+			Order order(1, 1, vector<OrderItem>(1, item), order_date, 6000.0);
+			vector<Order>  test;
+			test.push_back(order);
+			//Act
+			vector<Order> result = warehouse.getSalesHistory();
+			//Assert
+			Assert::AreEqual(result.size(), test.size());
+			bool res = result[0] == test[0];
+			Assert::IsTrue(res);
+		}
+		TEST_METHOD(Warehouse_getClients) {
+			//Arrange
+			Warehouse warehouse;
+			int client_ID = 1;
+			string client_name = "AAA";
+			string client_type = "Retail";
+			string client_address = "Apple st.";
+			Client client(client_ID, client_name, client_type, client_address);
+			warehouse.registerClient(client);
+			vector<Client> test;
+			test.push_back(client);
+			//Act
+			vector<Client> result = warehouse.getClients();
+			//Assert
+			Assert::AreEqual(result.size(), test.size());
+			bool res = result[0] == test[0];
+			Assert::IsTrue(res);
+		}
+		TEST_METHOD(Warehouse_getNextOrderID) {
+			//Arange
+			Warehouse warehouse;
+			int test = 1;
+			//Act
+			int result = warehouse.getNextOrderID();
+			//Assert
+			Assert::AreEqual(result, test);
+		}
+		TEST_METHOD(WarehouseItems_are_Equal) {
+			//Arange
+			string product_SKU = "SKU-04";
+			string product_name = "Apple juice";
+			double product_base_price = 120.0;
+			string product_unit = "l";
+			double product_quantity = 400.0;
+			Product product(product_SKU, product_name, product_base_price, product_unit);
+			WarehouseItem item1(product, product_quantity);
+			WarehouseItem item2(product, product_quantity);
+			//Act
+			bool result = item1 == item2;
+			//Assert
+			Assert::IsTrue(result);
+		}
+		TEST_METHOD(WarehouseItems_are_not_Equal) {
+			//Arange
+			string product_SKU1 = "SKU-04";
+			string product_name1 = "Apple juice";
+			double product_base_price1 = 120.0;
+			string product_unit1 = "l";
+			double product_quantity1 = 400.0;
+			Product product1(product_SKU1, product_name1, product_base_price1, product_unit1);
+			WarehouseItem item1(product1, product_quantity1);
+			string product_SKU2 = "SKU-03";
+			string product_name2 = "Flour";
+			double product_base_price2 = 50.0;
+			string product_unit2 = "kg";
+			double product_quantity2 = 100.0;
+			Product product2(product_SKU2, product_name2, product_base_price2, product_unit2);
+			WarehouseItem item2(product2, product_quantity2);
+			//Act
+			bool result = item1 != item2;
+			//Assert
+			Assert::IsTrue(result);
 		}
 	};
 }

@@ -4,10 +4,6 @@
 #include<memory>
 #include<iomanip>
 #include "../Solver/Warehouse.h"
-#include "../Solver/BulkProduct.h"
-#include "../Solver/PackedProduct.h"
-#include "../Solver/RetailStore.h"
-#include "../Solver/WholesaleClient.h"
 #include "../Solver/Date.h"
 
 #include "../Solver/Product.h"
@@ -23,6 +19,14 @@ enum class MenuOption {
 	CreateNewOrder = 5,
 	RestockProduct = 6,
 	RegisterClient = 7,
+    Invalid
+};
+/**
+ * @brief класс "Типы магазинов"
+ */
+enum class TypeOfClient {
+    Retail = 1,
+    Wholesale = 2,
     Invalid
 };
 /**
@@ -50,43 +54,20 @@ double inputDouble();
 * @param flourBulk - нерасфасованная мука
 * @param flourPacked - расфасованная мука
 * @param SugarBulk - нерасфасованный сахар
-* @param SugarPacked - расфасованный сахар
-* @param store - розничный магазин
-* @param wholesaleClientt - оптовый покупатель
 * @cart1 - карта заказа 1
-* @cart2 - карта заказа 2
-* @cart3 - карта заказа 3
 * @choice/user_mod - режим меню
 * 
 */
 using namespace std;
 int main() {
 	Warehouse warehouse;
-	shared_ptr<BulkProduct> flourBulk = make_shared<BulkProduct>("SKU-01", "Premium-grade flour (raw material)", 40.0, "kg");
-	shared_ptr<PackedProduct> flourPacked = make_shared<PackedProduct>("SKU-02", "Premium-grade flour (pre-packaged)", 90.0, "Bag 2 kg", 2.0);
-	shared_ptr<BulkProduct> SugarBulk = make_shared<BulkProduct>("SKU-03", "Sugar (raw material)", 55.0, "kg");
-	shared_ptr<PackedProduct> juicePacked = make_shared<PackedProduct>("SKU-04", "Apple juice (pre-packaged)", 120.0, "Bottle 1 l", 1.0);
-	warehouse.addProductStock(flourBulk, 2000.0);
-	warehouse.addProductStock(flourPacked, 150.0);
-	warehouse.addProductStock(SugarBulk, 5000.0);
-	warehouse.addProductStock(juicePacked, 400.0);
-	shared_ptr<RetailStore> store = make_shared<RetailStore>(101, "Store 7/11", "St. Apple, 15");
-	shared_ptr<WholesaleClient> wholesaleClient = make_shared<WholesaleClient>(201, "BakalCorp", 0.0);
-	warehouse.registerClient(store);
-	warehouse.registerClient(wholesaleClient);
-
-	vector<pair<string, double>> cart1;
-	cart1.push_back(pair<string, double>("SKU-02", 50.0));
-	cart1.push_back(pair<string, double>("SKU-04", 30.0));
-	warehouse.processOrder(101, cart1, Date(1, 11, 2026));
-
-	vector<pair<string, double>> cart2;
-	cart2.push_back(pair<string, double>("SKU-03", 3000.0));
-	warehouse.processOrder(201, cart2, Date(5, 11, 2026));
-
-	vector<pair<string, double>> cart3;
-	cart3.push_back(pair<string, double>("SKU-02", 20.0));
-	warehouse.processOrder(201, cart3, Date(12, 11, 2026));
+    warehouse.addProductStock(Product("SKU-01", "Premium flour", 40.0, "kg"), 2000.0);
+    warehouse.addProductStock(Product("SKU-02", "Premium flour per-packeged", 40.0, "kg"), 2000.0);
+    warehouse.addProductStock(Product("SKU-03", "Sugar raw", 55.0, "kg"), 5000.0);
+    warehouse.addProductStock(Product("SKU-04", "Apple juice", 120.0, "Bottle 1 l"), 400.0);
+    vector<pair<string, double>> cart1;
+    cart1.push_back(pair<string, double>("SKU-02", 50.0));
+    warehouse.processOrder(101, cart1, Date(1, 11, 2026));
 
     int chose = -1;
     MenuOption user_mod = MenuOption::Invalid;
@@ -101,7 +82,7 @@ int main() {
         case MenuOption::ShowInventory: {
             cout << "\n[TASK 1] CURRENT WAREHOUSE STOCK AND INVENTORY:\n";
             printDivider();
-            const vector<WarehouseItem>& inventory = warehouse.getCurrentInventory();
+            const vector<WarehouseItem> inventory = warehouse.getCurrentInventory();
 
             if (inventory.empty()) {
                 cout << "The warehouse is completely empty.\n";
@@ -109,8 +90,8 @@ int main() {
             else {
                 for (size_t i = 0; i < inventory.size(); ++i) {
                     const WarehouseItem& item = inventory[i];
-                    shared_ptr<Product> baseProductPtr = item.product;
-                    cout << " * " << baseProductPtr->getInfoString() << " | Stock remaining: " << item.quantity << " units\n";
+                    Product baseProduct = item.product;
+                    cout << " * " << baseProduct.getInfoString() << " | Stock remaining: " << item.quantity << " units\n";
                 }
             }
             printDivider();
@@ -124,16 +105,16 @@ int main() {
             printDivider();
 
             bool hasOrders = false;
-            const vector<Order>& history = warehouse.getSalesHistory();
+            const vector<Order> history = warehouse.getSalesHistory();
 
             for (size_t i = 0; i < history.size(); ++i) {
                 const Order& currentOrder = history[i];
                 if (currentOrder.getClientID() == searchId) {
                     hasOrders = true;
-                    const vector<OrderItem>& itemsInOrder = currentOrder.getItems();
+                    const vector<OrderItem> itemsInOrder = currentOrder.getItems();
                     cout << " Order #" << currentOrder.getOrderID() << " dated " << currentOrder.getOrderDate().ToString() << ":\n";
                     for (size_t j = 0; j < itemsInOrder.size(); ++j) {
-                        cout << "    -> " << itemsInOrder[j].product->getName() << " | Quantity: " << itemsInOrder[j].quantity << " units\n";
+                        cout << "    -> " << itemsInOrder[j].product.getName() << " | Quantity: " << itemsInOrder[j].quantity << " units\n";
                     }
                 }
             }
@@ -175,14 +156,14 @@ int main() {
             cout << "\n[TASK 4] LOYAL CLIENTS WITH AN ACTIVE DISCOUNT STATUS:\n";
             printDivider();
 
-            const vector<shared_ptr<Client>>& clientList = warehouse.getClients();
+            const vector<Client> clientList = warehouse.getClients();
             bool foundDiscount = false;
 
             for (size_t i = 0; i < clientList.size(); ++i) {
-                const shared_ptr<Client>& currentClient = clientList[i];
-                if (currentClient->getDiscountRate() > 0.0) {
+                const Client currentClient = clientList[i];
+                if (currentClient.getDiscountRate() > 0.0) {
                     foundDiscount = true;
-                    cout << " * " << currentClient->getName() << " | " << currentClient->getClientTypeString() << " | Total revenue: " << currentClient->getTotalSpent() << " rub.\n";
+                    cout << " * " << currentClient.getName() << " | " << currentClient.toString() << " | Total revenue: " << currentClient.getTotalSpent() << " rub.\n";
                 }
             }
             if (!foundDiscount) {
@@ -198,7 +179,8 @@ int main() {
 
             cout << "Enter product SKU: ";
             string orderSku;
-            getline(cin, orderSku);
+            cin >> orderSku;
+            cin.ignore(32767, '\n');
 
             cout << "Enter order quantity: ";
             double orderQty = inputDouble();
@@ -220,20 +202,27 @@ int main() {
             cout << "\n--- STOCK RESTOCK OPERATIONS ---\n";
             cout << "Enter target product SKU code (e.g., SKU-01, SKU-02): ";
             string refillSku;
-            getline(cin, refillSku);
+            cin >> refillSku;
+            cin.ignore(32767, '\n');
+
             cout << "Enter quantity allocation amount: ";
             double refillQty = inputDouble();
-            shared_ptr<Product> targetProduct = nullptr;
-            const vector<WarehouseItem>& inventory = warehouse.getCurrentInventory();
+
+            Product targetProduct;
+            bool found = false;
+
+            const vector<WarehouseItem> inventory = warehouse.getCurrentInventory();
+
             for (size_t i = 0; i < inventory.size(); ++i) {
-                if (inventory[i].product->getSKU() == refillSku) {
+                if (inventory[i].product.getSKU() == refillSku) {
                     targetProduct = inventory[i].product;
+                    found = true;
                     break;
                 }
             }
-            if (targetProduct) {
-                warehouse.addProductStock(targetProduct, refillQty);
-                cout << "[SUCCESS]: Stock parameters reinforced successfully.\n";
+            if(found) {
+            warehouse.addProductStock(targetProduct, refillQty);
+            cout << "[SUCCESS]: Stock parameters reinforced successfully.\n";
             }
             else {
                 cout << "[ERROR]: SKU string does not match any items stored in inventory base.\n";
@@ -244,24 +233,24 @@ int main() {
             cout << "\n--- CUSTOMER REGISTRATION SYSTEM ---\n";
             cout << "Enter unique integer Client ID: ";
             int newId = inputInt();
-            cout << "Enter full name / Corporate account moniker: ";
+            cout << "Enter Name: ";
             string newName;
-            getline(cin, newName);
+            cin >> newName;
             cout << "Select user type subclass (1 - Retail Store, 2 - Wholesale Entity): ";
             int typeChoice = inputInt();
-            if (typeChoice == 1) {
-                cout << "Enter specific physical delivery address configuration: ";
-                string address;
-                getline(cin, address);
-                warehouse.registerClient(make_shared<RetailStore>(newId, newName, address));
-                cout << "[SUCCESS]: Retail shop recorded in global tracking layout.\n";
-            }
-            else if (typeChoice == 2) {
-                warehouse.registerClient(make_shared<WholesaleClient>(newId, newName, 0.0));
+            TypeOfClient type = static_cast<TypeOfClient>(typeChoice);
+            switch (type) {
+            case TypeOfClient::Retail :
+                    warehouse.registerClient(Client(newId, newName, "Retail store", "Default Addres"));
+                    cout << "[SUCCESS]: Wholesale buyer synchronized. Initial tracking status discount: 0%\n";
+                    break;
+            case TypeOfClient::Wholesale : 
+                warehouse.registerClient(Client(newId, newName, "Wholesale Entity", ""));
                 cout << "[SUCCESS]: Wholesale buyer synchronized. Initial tracking status discount: 0%\n";
-            }
-            else {
+                break;
+            default :
                 cout << "[ERROR]: Invalid category selection matrix setup.\n";
+                break;
             }
             break;
         }

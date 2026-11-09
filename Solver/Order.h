@@ -12,11 +12,23 @@ struct OrderItem {
 	/**
 	* @brief указатель на заказываемый продукт
 	*/
-	shared_ptr<Product> product;
+	Product product;
 	/**
 	* @brief количество заказываемого продукта
 	*/
 	double quantity;
+	/**
+	* @brief оператор ==
+	* @param other - предмет заказа, с которым нужно сравнить
+	* @return true, если this == other
+	*/
+	bool operator==(const OrderItem& other) const;
+	/**
+	* @brief оператор !=
+	* @param other - предмет заказа, с которым нужно сравнить
+	* @return true, если this != other
+	*/
+	bool operator!= (const OrderItem & other) const;
 };
 /**
 * @brief класс "Заказ"
@@ -53,7 +65,7 @@ public:
 	* @param data - дата
 	* @param total - итоговая оплата
 	*/
-	Order(int id, int cid, vector<OrderItem> orderItems, Date date, double total);
+	Order(const int id, const int cid, vector<OrderItem> orderItems, const Date date, const double total);
 	/**
 	* @brief функция получения номера заказа
 	* @return номер заказа
@@ -84,5 +96,17 @@ public:
 	* @return информация о заказе
 	*/
 	string ToString();
+	/**
+	* @brief оператор ==
+	* @param other - заказ, с которым нужно сравнить
+	* @return true, если this == other
+	*/
+	bool operator==(const Order& other) const;
+	/**
+	* @brief оператор !=
+	* @param other - заказ, с которым нужно сравнить
+	* @return true, если this != other
+	*/
+	bool operator!=(const Order& other) const;
 };
 

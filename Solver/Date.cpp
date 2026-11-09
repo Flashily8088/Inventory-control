@@ -21,6 +21,16 @@ bool Date::operator>=(const Date& other) const
 	return day >= other.day;
 }
 
+bool Date::operator==(const Date& other) const
+{
+	return (day == other.day && month == other.month && year == other.year);
+}
+
+bool Date::operator!=(const Date& other) const
+{
+	return !(*this == other);
+}
+
 void Date::input()
 {
 	int d, m, y;

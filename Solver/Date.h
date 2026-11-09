@@ -44,6 +44,18 @@ struct Date
 	*/
 	bool operator >=(const Date& other) const;
 	/**
+	* @brief оператор ==
+	* @param other - дата с которой нужно сравнить
+	* @return true, если this == other
+	*/
+	bool operator ==(const Date& other) const;
+	/**
+	* @brief оператор !=
+	* @param other - дата с которой нужно сравнить
+	* @return true, если this != other
+	*/
+	bool operator !=(const Date& other) const;
+	/**
 	* @brief функци¤ ввода даты
 	*/
 	void input();

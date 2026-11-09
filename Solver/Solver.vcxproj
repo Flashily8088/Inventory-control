@@ -19,26 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BulkProduct.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Date.h" />
     <ClInclude Include="Order.h" />
-    <ClInclude Include="PackedProduct.h" />
     <ClInclude Include="Product.h" />
-    <ClInclude Include="RetailStore.h" />
     <ClInclude Include="Warehouse.h" />
-    <ClInclude Include="WholesaleClient.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BulkProduct.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="Order.cpp" />
-    <ClCompile Include="PackedProduct.cpp" />
     <ClCompile Include="Product.cpp" />
-    <ClCompile Include="RetailStore.cpp" />
     <ClCompile Include="Warehouse.cpp" />
-    <ClCompile Include="WholesaleClient.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
